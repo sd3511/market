@@ -1,0 +1,54 @@
+<div>
+<h2>Список Товаров</h2>
+    <h4 class="display-7">Фильтр</h4>
+
+<form class="align-middle" ng-submit="loadProducts()">
+    <div class="input-group input-group-sm" style="padding: 4px;">
+        <input id="minPrice" class="form-control" ng-model="filter.minPrice" type="text"
+               aria-describedby="inputGroup-sizing-sm" placeholder="Минимальная цена" style="margin-left: 10px;">
+
+        <input id="maxPrice" class="form-control" ng-model="filter.maxPrice" type="text"
+               aria-describedby="inputGroup-sizing-sm" placeholder="Максимальная цена" style="margin-left: 10px;">
+
+        <input id="title" class="form-control" ng-model="filter.title" type="text"
+               aria-describedby="inputGroup-sizing-sm" placeholder="Название продукта" style="margin-left: 10px;">
+
+        <button id="filter" class="btn btn-outline-warning btn-sm"
+                style="margin-left: 10px;" type="submit">Отфильтровать
+        </button>
+    </div>
+</form>
+
+
+<table class="table table-hover" cellpadding="0" cellspacing="0">
+    <tr>
+        <td>ID</td>
+        <td>Название</td>
+        <td>Цена</td>
+        <td></td>
+    </tr>
+    <tbody>
+
+    <tr ng-repeat="p in productsList">
+        <td>{{p.id}}</td>
+        <td>{{p.title}}</td>
+        <td>{{p.price}}</td>
+        <td>
+            <button type="button" class="btn btn-primary" ng-click="addToCart(p.id)">Добавить в корзинуу</button>
+        </td>
+    </tr>
+    </tbody>
+
+</table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" ng-click="loadProducts(currentPage-1)" >Previous</a></li>
+            <li class="page-item"><a class="page-link" ng-click="loadProducts(1)">1</a></li>
+            <li class="page-item"><a class="page-link" ng-click="loadProducts(2)">2</a></li>
+            <li class="page-item"><a class="page-link" ng-click="loadProducts(3)">3</a></li>
+            <li class="page-item"><a class="page-link" ng-click="loadProducts(currentPage+1)">Next</a></li>
+        </ul>
+    </nav>
+
+
+</div>
