@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // https://cloud.spring.io/spring-cloud-gateway/reference/html/
 
 @SpringBootApplication
-public class WinterMarketGatewayApplication {
+public class MarketGatewayApplication {
     public static void main(String[] args) {
-        SpringApplication.run(WinterMarketGatewayApplication.class, args);
+        SpringApplication.run(MarketGatewayApplication.class, args);
     }
 }

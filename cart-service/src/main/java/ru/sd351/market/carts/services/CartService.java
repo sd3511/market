@@ -1,6 +1,7 @@
 package ru.sd351.market.carts.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.sd351.market.api.ProductDto;
 import ru.sd351.market.carts.integrations.ProductServiceIntegration;
@@ -14,58 +15,39 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CartService {
     private final ProductServiceIntegration productServiceIntegration;
-    private Cart tempCart;
-    private Cart userCart;
-    private Map<String, Cart> cartMap;
+    private Map<String, Cart> carts;
+    @Value("${cart-service.cart-prefix}")
+    private String cartPrefix;
 
     @PostConstruct
     public void init() {
-        tempCart = new Cart();
-        cartMap = new HashMap<>();
+        carts = new HashMap<>();
+
     }
 
-    public Cart getTempCart() {
-        return tempCart;
-    }
-
-    public void addOnUserCart(Long productId, String username) {
-        ProductDto product = productServiceIntegration.getProductById(productId);
-        userCart.add(product);
-        cartMap.put(username, userCart);
-    }
-
-    public void addOnTempCart(Long productId) {
-        ProductDto product = productServiceIntegration.getProductById(productId);
-        tempCart.add(product);
-    }
-
-    public void removeFromTempCart(Long productId) {
-        tempCart.remove(productId);
-    }
-
-    public void removeFromTUserCart(Long productId, String username) {
-        userCart.remove(productId);
-        cartMap.put(username, userCart);
-    }
-
-    public void clearTempCart() {
-        tempCart.clear();
-    }
-
-    public void clearUserCart(String username) {
-        userCart.clear();
-        cartMap.put(username, userCart);
-    }
-
-
-    public Cart getCurrentUserCart(String username) {
-        if (cartMap.containsKey(username)) {
-            userCart = cartMap.get(username);
-            return userCart;
-        } else {
-            userCart = new Cart();
-            cartMap.put(username, userCart);
-            return cartMap.get(username);
+    public Cart getCurrentCart(String uuid) {
+        String targetUid = cartPrefix+uuid;
+        if (!carts.containsKey(targetUid)) {
+            carts.put(targetUid, new Cart());
         }
+        return carts.get(targetUid);
     }
+
+    public void add(Long productId, String uuid) {
+        ProductDto product = productServiceIntegration.getProductById(productId);
+        getCurrentCart(uuid).add(product);
+    }
+
+
+    public void remove(Long productId, String uuid) {
+        getCurrentCart(uuid).remove(productId);
+    }
+
+
+    public void clear(String uuid) {
+        getCurrentCart(uuid).clear();
+    }
+
+
+
 }

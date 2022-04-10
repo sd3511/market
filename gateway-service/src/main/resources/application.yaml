@@ -41,5 +41,4 @@ spring:
             - JwtAuthFilter
 
 jwt:
-  secret: daewtrehrgfq3232erwgtfmlhgfdsaetsrdfyguhij4r2gerw
-
+  secret: h4f8093h4f983yhrt9834hr0934hf0hf493g493gf438rh438th34g34g

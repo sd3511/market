@@ -3,8 +3,11 @@ package ru.sd351.market.carts.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.sd351.market.api.CartDto;
+import ru.sd351.market.api.StringResponse;
 import ru.sd351.market.carts.convertes.CartConverter;
 import ru.sd351.market.carts.services.CartService;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/cart")
@@ -13,43 +16,45 @@ public class CartController {
     private final CartService cartService;
     private final CartConverter cartConverter;
 
-    @GetMapping("/add/{id}")
-    public void addToCart(@PathVariable Long id, @RequestHeader(required = false) String username) {
-        if (username != null) {
-            cartService.addOnUserCart(id, username);
-        } else {
-            cartService.addOnTempCart(id);
-        }
+    @GetMapping("/generate_uuid")
+    public StringResponse generateUuid(){
+        return new StringResponse(UUID.randomUUID().toString());
+    }
+
+
+    @GetMapping("/{uuid}/add/{id}")
+    public void addToCart(@PathVariable Long id, @PathVariable String uuid, @RequestHeader(required = false) String username) {
+        String targetUid = getCartUuid(username,uuid);
+        cartService.add(id, targetUid);
+
 
     }
 
-    @GetMapping("/clear")
-    public void clearCart(@RequestHeader(required = false) String username) {
-        if (username != null) {
-            cartService.clearUserCart(username);
-        } else {
-            cartService.clearTempCart();
-
-        }
-    }
-
-    @GetMapping("/remove/{id}")
-    public void removeFromCart(@PathVariable Long id, @RequestHeader(required = false) String username) {
-        if (username != null) {
-            cartService.removeFromTUserCart(id, username);
-        } else {
-            cartService.removeFromTempCart(id);
-        }
+    @GetMapping("/{uuid}/clear")
+    public void clearCart(@RequestHeader(required = false) String username, @PathVariable String uuid) {
+        String targetUid = getCartUuid(username,uuid);
+        cartService.clear(targetUid);
 
     }
 
-    @GetMapping
-    public CartDto getCurrentCart(@RequestHeader(required = false) String username) {
-        if (username != null) {
-            return cartConverter.entityToDto(cartService.getCurrentUserCart(username));
-        } else {
-            return cartConverter.entityToDto(cartService.getTempCart());
-        }
+    @GetMapping("/{uuid}/remove/{id}")
+    public void removeFromCart(@PathVariable Long id, @PathVariable String uuid, @RequestHeader(required = false) String username) {
+        String targetUid = getCartUuid(username,uuid);
+        cartService.remove(id,targetUid);
 
+    }
+
+    @GetMapping("/{uuid}")
+    public CartDto getCurrentCart(@RequestHeader(required = false) String username, @PathVariable String uuid) {
+       String targetUid = getCartUuid(username,uuid);
+        return cartConverter.entityToDto(cartService.getCurrentCart(targetUid));
+
+    }
+    
+    private String getCartUuid(String username, String uuid){
+        if (username!=null){
+            return username;
+        }
+        return uuid;
     }
 }

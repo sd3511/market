@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WinterMarketCoreApplication {
+public class MarketCoreApplication {
 
 	// Домашнее задание:
 	// - Если пользователь не залогинен, то ему должна быть выдана общая корзина
@@ -12,6 +12,6 @@ public class WinterMarketCoreApplication {
 	// - Добавить пагинацию на фронт (кнопки < Пред стр, 1, 2, 3, 4, .., След стр >)ию)
 
 	public static void main(String[] args) {
-		SpringApplication.run(WinterMarketCoreApplication.class, args);
+		SpringApplication.run(MarketCoreApplication.class, args);
 	}
 }
