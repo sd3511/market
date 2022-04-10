@@ -16,9 +16,7 @@ public class Cart {
         this.items = new ArrayList<>();
     }
 
-    public List<CartItem> getItems() {
-        return items;
-    }
+
 
     public void add(ProductDto product) {
         for (CartItem item : items) {
